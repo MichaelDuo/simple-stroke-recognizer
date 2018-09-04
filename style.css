@@ -1,0 +1,22 @@
+.app-title {
+    /* height: 1000px; */
+}
+.recognizer-wrapper {
+    display: flex;
+}
+.painter-wrapper {
+    position: relative;
+    border: solid 1px black;
+    width: 500px;
+    height: 500px;
+}
+.result-wrapper {
+    position: relative;
+    flex-grow: 1;
+}
+.result {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
