@@ -15,6 +15,7 @@
     flex-grow: 1;
 }
 .result {
+    font-size: 30px;
     position: absolute;
     top: 50%;
     left: 50%;

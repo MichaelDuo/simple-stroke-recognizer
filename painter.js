@@ -7,6 +7,7 @@ function Painter(id){
     container.appendChild(canvas)
     this.context = canvas.getContext('2d')
     this.paint = false
+    this.pointsOnly = false
     this.clickX = []
     this.clickY = []
     this.clickDrag = []
@@ -47,17 +48,23 @@ Painter.prototype.redraw = function(){
     context.lineJoin = "round"
     context.lineWidth = 5
 
-    for(var i=0; i<this.clickX.length; i++){
-        context.beginPath()
-        context.moveTo(this.clickX[i], this.clickY[i])
-        if(this.clickDrag[i]){
-            context.moveTo(this.clickX[i-1], this.clickY[i-1])
-        } else {
-            context.moveTo(this.clickX[i], this.clickY[i])
+    if(this.pointsOnly){
+        for(var i=0; i<this.clickX.length; i++){
+            context.fillRect(this.clickX[i], this.clickY[i],10,10);
         }
-        context.lineTo(this.clickX[i], this.clickY[i])
-        context.closePath()
-        context.stroke()
+    } else {
+        for(var i=0; i<this.clickX.length; i++){
+            context.beginPath()
+            context.moveTo(this.clickX[i], this.clickY[i])
+            if(this.clickDrag[i]){
+                context.moveTo(this.clickX[i-1], this.clickY[i-1])
+            } else {
+                context.moveTo(this.clickX[i], this.clickY[i])
+            }
+            context.lineTo(this.clickX[i], this.clickY[i])
+            context.closePath()
+            context.stroke()
+        }
     }
 }
 
@@ -69,8 +76,29 @@ Painter.prototype.getData = function(){
             result.push(stroke)
             stroke = []
         }
-        stroke.push([this.clickX[i], this.clickY[i]])
+        stroke.push({ x: this.clickX[i], y: this.clickY[i]})
     }
     result.push(stroke)
     return result
+}
+
+Painter.prototype.draw = function(points, pointsOnly){
+    this.pointsOnly = pointsOnly
+    this.clickX = []
+    this.clickY = []
+    this.clickDrag = []
+    points.forEach(point => {
+        this.clickX.push(point.x)
+        this.clickY.push(point.y)
+        this.clickDrag.push(false)
+    })
+    this.redraw()
+    this.pointsOnly = false
+}
+
+Painter.prototype.clear = function(){
+    this.clickX = []
+    this.clickY = []
+    this.clickDrag = []
+    this.redraw()
 }
